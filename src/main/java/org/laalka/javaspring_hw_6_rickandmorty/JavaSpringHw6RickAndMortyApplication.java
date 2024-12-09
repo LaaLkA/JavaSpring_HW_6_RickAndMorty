@@ -2,6 +2,8 @@ package org.laalka.javaspring_hw_6_rickandmorty;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class JavaSpringHw6RickAndMortyApplication {
@@ -10,4 +12,8 @@ public class JavaSpringHw6RickAndMortyApplication {
         SpringApplication.run(JavaSpringHw6RickAndMortyApplication.class, args);
     }
 
+    @Bean
+    public RestTemplateBuilder restTemplateBuilder() {
+        return new RestTemplateBuilder();
+    }
 }
