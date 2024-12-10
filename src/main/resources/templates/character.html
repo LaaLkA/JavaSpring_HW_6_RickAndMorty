@@ -56,10 +56,10 @@
     function updateProfile(character) {
         characterProfile.innerHTML = `
                 <img src="${character.image}" alt="Character Image" class="img-fluid mb-4" style="max-width:300px;"/>
-                <p><strong>ID:</strong> ${character.id}</p>
-                <p><strong>Имя:</strong> ${character.name}</p>
-                <p><strong>Статус:</strong> ${character.status}</p>
-                <p><strong>Раса:</strong> ${character.species}</p>
+                <p class="text-start"><strong>ID:</strong> ${character.id}</p>
+                <p class="text-start"><strong>Имя:</strong> ${character.name}</p>
+                <p class="text-start"><strong>Статус:</strong> ${character.status}</p>
+                <p class="text-start"><strong>Раса:</strong> ${character.species}</p>
             `;
     }
 
