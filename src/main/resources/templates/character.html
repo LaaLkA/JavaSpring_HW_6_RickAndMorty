@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Character</title>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+</head>
+<body class="container">
+<h1 class="text-start">Профиль персонажа</h1>
+<div class="row mb-3">
+    <div class="col-md-3">
+        <input type="number" id="character-id-input" class="form-control" placeholder="Введите ID персонажа" value="1">
+    </div>
+    <div class="col-md-3">
+        <button id="load-button" class="btn btn-primary">Загрузить профиль</button>
+    </div>
+</div>
+
+<div id="character-profile" class="text-center">
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js}"></script>
+<script>
+    function getIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+    }
+
+    const loadButton = document.getElementById('load-button');
+    const characterProfile = document.getElementById('character-profile');
+    const characterIdInput = document.getElementById('character-id-input');
+
+    loadButton.addEventListener('click', () => {
+        const id = characterIdInput.value;
+        loadCharacter(id);
+    });
+
+    function loadCharacter(id) {
+        fetch('/api/character?id=' + id)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки персонажа');
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateProfile(data);
+            })
+            .catch(error => {
+                console.error(error);
+                characterProfile.innerHTML = '<p class="text-danger">Ошибка загрузки персонажа</p>';
+            });
+    }
+
+    function updateProfile(character) {
+        characterProfile.innerHTML = `
+                <img src="${character.image}" alt="Character Image" class="img-fluid mb-4" style="max-width:300px;"/>
+                <p><strong>ID:</strong> ${character.id}</p>
+                <p><strong>Имя:</strong> ${character.name}</p>
+                <p><strong>Статус:</strong> ${character.status}</p>
+                <p><strong>Раса:</strong> ${character.species}</p>
+            `;
+    }
+
+    const characterId = getIdFromUrl() || 1;
+    characterIdInput.value = characterId;
+    loadCharacter(characterId);
+</script>
+</body>
+</html>

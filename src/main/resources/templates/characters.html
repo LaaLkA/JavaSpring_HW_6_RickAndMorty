@@ -18,7 +18,7 @@
             <th>Фото</th>
         </tr>
     </thead>
-    <tbody id="person-table-body"></tbody>
+    <tbody id="character-table-body"></tbody>
 </table>
 <div class="d-flex justify-content-between">
     <a class="btn btn-primary" id="prev-button">Назад</a>
@@ -30,12 +30,12 @@
 <script>
     let currentPage = 0;
     const pageSize = 10;
-    const tableBody = document.getElementById('person-table-body');
+    const tableBody = document.getElementById('character-table-body');
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
 
     function loadPerson(page) {
-            fetch('/api/persons?page=' + page)
+            fetch('/api/characters?page=' + page)
                 .then(response => response.json())
                 .then(data => {
                     updateTable(data);
@@ -47,18 +47,18 @@
                 .catch(error => console.error('Ошибка загрузки персонажей: ', error));
     }
 
-    function updateTable(persons){
+    function updateTable(characters){
         // Очистка таблицы
         tableBody.innerHTML = '';
         // Заполнение таблицы
-        persons.forEach(person => {
+        characters.forEach(character => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${person.id}</td>
-                <td>${person.name}</td>
-                <td>${person.status}</td>
-                <td>${person.species}</td>
-                <td><img src="${person.image}" alt="Image" style="width:100px"/></td>
+                <td>${character.id}</td>
+                <td><a href="http://localhost:8080/rickandmortyui/character?id=${character.id}">${character.name}</a></td>
+                <td>${character.status}</td>
+                <td>${character.species}</td>
+                <td><img src="${character.image}" alt="Image" style="width:100px"/></td>
             `;
             tableBody.appendChild(row);
         })

@@ -2,7 +2,7 @@ package org.laalka.javaspring_hw_6_rickandmorty.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.laalka.javaspring_hw_6_rickandmorty.Service.RickAndMortyClient;
-import org.laalka.javaspring_hw_6_rickandmorty.model.Person;
+import org.laalka.javaspring_hw_6_rickandmorty.model.Character;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +28,8 @@ public class RickAndMortyController {
     public String getCharactersByFirstLastId(@PathVariable("first_id") String firstId,
                                              @PathVariable("last_id") String lastId,
                                              Model model) {
-        List<Person> persons = rickAndMortyClient.getPersonsStartEndId(firstId, lastId);
-        model.addAttribute("persons", persons);
+        List<Character> characters = rickAndMortyClient.getCharactersStartEndId(firstId, lastId);
+        model.addAttribute("persons", characters);
         return "charactersByPage";
 
 
@@ -42,14 +42,19 @@ public class RickAndMortyController {
         int startId = page * pageSize + 1;
         int endId = startId + pageSize;
 
-        List<Person> persons = rickAndMortyClient.getPersonsStartEndId(String.valueOf(startId), String.valueOf(endId));
-        model.addAttribute("persons", persons);
+        List<Character> characters = rickAndMortyClient.getCharactersStartEndId(String.valueOf(startId), String.valueOf(endId));
+        model.addAttribute("characters", characters);
         model.addAttribute("page", page);
         return "charactersByPage";
     }
 
-    @GetMapping("persons")
-    public String getPersons(Model model) {
-        return "persons";
+    @GetMapping("/characters")
+    public String getCharacters(Model model) {
+        return "characters";
+    }
+
+    @GetMapping("/character")
+    public String getCharacterById() {
+        return "character";
     }
 }

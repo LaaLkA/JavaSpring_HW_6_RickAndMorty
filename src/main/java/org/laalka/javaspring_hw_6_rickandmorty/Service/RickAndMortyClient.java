@@ -1,10 +1,8 @@
 package org.laalka.javaspring_hw_6_rickandmorty.Service;
 
-import lombok.AllArgsConstructor;
 import org.laalka.javaspring_hw_6_rickandmorty.model.Location;
 import org.laalka.javaspring_hw_6_rickandmorty.model.Origin;
-import org.laalka.javaspring_hw_6_rickandmorty.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.laalka.javaspring_hw_6_rickandmorty.model.Character;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,15 +21,36 @@ public class RickAndMortyClient {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public List<Person> getPersons(){
+    public List<Character> getCharacters(){
         return null;
     }
 
-    public List<Person> getPersonsStartEndId(String firstId, String lastId) {
+    public Character getCharacterById(Long id){
+        String url = BASE_URL + "/" + id;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map body = response.getBody();
+        Map originMap = (Map) body.get("origin");
+        Map locationMap = (Map) body.get("location");
+
+        return new Character(
+                ((Number) body.get("id")).longValue(),
+                (String) body.get("name"),
+                (String) body.get("status"),
+                (String) body.get("species"),
+                (String) body.get("type"),
+                (String) body.get("gender"),
+                new Origin((String) originMap.get("name"), (String) originMap.get("url")),
+                new Location((String) locationMap.get("name"), (String) locationMap.get("url")),
+                (String) body.get("image")
+        );
+    }
+
+
+    public List<Character> getCharactersStartEndId(String firstId, String lastId) {
         int startId = Integer.parseInt(firstId);
         int endId = Integer.parseInt(lastId);
 
-        List<Person> persons = new ArrayList<>();
+        List<Character> characters = new ArrayList<>();
 
         for (int i = startId; i <= endId; i++) {
             String url = BASE_URL + "/" + i;
@@ -64,7 +83,7 @@ public class RickAndMortyClient {
 //
 //                Person person = new Person(personId, name, status, species, type, gender, origin, location, image);
 
-                Person person = new Person(
+                Character character = new Character(
                         ((Number) body.get("id")).longValue(),
                         (String) body.get("name"),
                         (String) body.get("status"),
@@ -75,11 +94,11 @@ public class RickAndMortyClient {
                         new Location((String) locationMap.get("name"), (String) locationMap.get("url")),
                         (String) body.get("image")
                 );
-                persons.add(person);
+                characters.add(character);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return persons;
+        return characters;
     }
 }
